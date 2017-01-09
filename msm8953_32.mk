@@ -115,10 +115,8 @@ PRODUCT_BOOT_JARS += telephony-ext
 
 # When can normal compile this module, need module owner enable below commands
 # Add the overlay path
-#PRODUCT_PACKAGE_OVERLAYS := $(QCPATH)/qrdplus/Extension/res \
-#        $(QCPATH)/qrdplus/globalization/multi-language/res-overlay \
-#        $(PRODUCT_PACKAGE_OVERLAYS)
 PRODUCT_PACKAGE_OVERLAYS := $(QCPATH)/qrdplus/Extension/res \
+        $(QCPATH)/qrdplus/globalization/multi-language/res-overlay \
         $(PRODUCT_PACKAGE_OVERLAYS)
 
 #for android_filesystem_config.h
