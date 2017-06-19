@@ -106,10 +106,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/camera/ov5693_chromatix.xml:system/etc/camera/ov5693_chromatix.xml \
     $(LOCAL_PATH)/configs/camera/ov16860_chromatix.xml:system/etc/camera/ov16860_chromatix.xml
 
-# CMActions
-PRODUCT_PACKAGES += \
-    CMActions
-
 # Display
 PRODUCT_PACKAGES += \
     gralloc.msm8953 \
@@ -221,6 +217,7 @@ PRODUCT_PACKAGES += \
     init.mmi.touch.sh \
     wlan_carrier_bin.sh \
     init.qcom.bt.sh \
+    init.qcom.sensors.sh \
     init.qcom.ril.sh
 
 PRODUCT_PACKAGES += \
@@ -276,9 +273,11 @@ PRODUCT_COPY_FILES += \
     kernel/motorola/msm8953/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
     $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 
+# Disable Verity boot feature
+PRODUCT_SUPPORTS_VERITY := true
+
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 PRODUCT_GMS_CLIENTID_BASE := android-motorola
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
