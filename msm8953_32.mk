@@ -1,4 +1,4 @@
-DEVICE_PACKAGE_OVERLAYS := device/qcom/msm8953_32/overlay
+DEVICE_PACKAGE_OVERLAYS := $(LOCAL_PATH)/overlay
 
 TARGET_USES_QCOM_BSP := true
 
@@ -6,46 +6,35 @@ TARGET_USES_QCOM_BSP := true
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 TARGET_USES_NQ_NFC := true
 TARGET_KERNEL_VERSION := 3.18
-#QTIC flag
--include $(QCPATH)/common/config/qtic-config.mk
 
 # Enable features in video HAL that can compile only on this platform
 TARGET_USES_MEDIA_EXTENSIONS := true
 
 # media_profiles and media_codecs xmls for msm8953
 ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
-PRODUCT_COPY_FILES += device/qcom/msm8953_32/media/media_profiles_8953.xml:system/etc/media_profiles.xml \
-                      device/qcom/msm8953_32/media/media_codecs_8953.xml:system/etc/media_codecs.xml \
-                      device/qcom/msm8953_32/media/media_codecs_performance_8953.xml:system/etc/media_codecs_performance.xml \
-                      device/qcom/msm8953_32/media/media_profiles_8953_v1.xml:system/etc/media_profiles_8953_v1.xml \
-                      device/qcom/msm8953_32/media/media_codecs_8953_v1.xml:system/etc/media_codecs_8953_v1.xml \
-                      device/qcom/msm8953_32/media/media_codecs_performance_8953_v1.xml:system/etc/media_codecs_performance_8953_v1.xml
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/media/media_profiles_8953.xml:system/etc/media_profiles.xml \
+                      $(LOCAL_PATH)/media/media_codecs_8953.xml:system/etc/media_codecs.xml \
+                      $(LOCAL_PATH)/media/media_codecs_performance_8953.xml:system/etc/media_codecs_performance.xml \
+                      $(LOCAL_PATH)/media/media_profiles_8953_v1.xml:system/etc/media_profiles_8953_v1.xml \
+                      $(LOCAL_PATH)/media/media_codecs_8953_v1.xml:system/etc/media_codecs_8953_v1.xml \
+                      $(LOCAL_PATH)/media/media_codecs_performance_8953_v1.xml:system/etc/media_codecs_performance_8953_v1.xml
 endif
 
-PRODUCT_COPY_FILES += device/qcom/msm8953_32/whitelistedapps.xml:system/etc/whitelistedapps.xml \
-                      device/qcom/msm8953_32/gamedwhitelist.xml:system/etc/gamedwhitelist.xml
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/whitelistedapps.xml:system/etc/whitelistedapps.xml \
+                      $(LOCAL_PATH)/gamedwhitelist.xml:system/etc/gamedwhitelist.xml
 
 PRODUCT_PROPERTY_OVERRIDES += \
        dalvik.vm.heapminfree=6m \
        dalvik.vm.heapstartsize=14m
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
-$(call inherit-product, device/qcom/common/common.mk)
+$(call inherit-product, $(LOCAL_PATH)/base.mk)
 
-PRODUCT_NAME := msm8953_32
-PRODUCT_DEVICE := msm8953_32
-
-# When can normal compile this module,  need module owner enable below commands
-# font rendering engine feature switch
--include $(QCPATH)/common/config/rendering-engine.mk
-ifneq (,$(strip $(wildcard $(PRODUCT_RENDERING_ENGINE_REVLIB))))
-    MULTI_LANG_ENGINE := REVERIE
-#   MULTI_LANG_ZAWGYI := REVERIE
-endif
+PRODUCT_NAME := Moto Z Play
+PRODUCT_DEVICE := addison
 
 #PRODUCT_BOOT_JARS += vcard \
                      com.qti.dpmframework
 PRODUCT_BOOT_JARS += qcom.fmradio
-PRODUCT_BOOT_JARS += qcmediaplayer
 
 ifneq ($(strip $(QCPATH)),)
     PRODUCT_BOOT_JARS += WfdCommon
@@ -82,22 +71,17 @@ PRODUCT_COPY_FILES += \
 #fstab.qcom
 PRODUCT_PACKAGES += fstab.qcom
 
-#OEM Services library
-PRODUCT_PACKAGES += oem-services
-PRODUCT_PACKAGES += libsubsystem_control
-PRODUCT_PACKAGES += libSubSystemShutdown
-
 PRODUCT_PACKAGES += wcnss_service
 
 # MSM IRQ Balancer configuration file
 PRODUCT_COPY_FILES += \
-    device/qcom/msm8953_32/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
+    $(LOCAL_PATH)/msm_irqbalance.conf:system/vendor/etc/msm_irqbalance.conf
 
 #wlan driver
 PRODUCT_COPY_FILES += \
-    device/qcom/msm8953_32/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
-    device/qcom/msm8953_32/WCNSS_qcom_wlan_nv.bin:persist/WCNSS_qcom_wlan_nv.bin \
-    device/qcom/msm8953_32/WCNSS_wlan_dictionary.dat:persist/WCNSS_wlan_dictionary.dat
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:persist/WCNSS_qcom_wlan_nv.bin \
+    $(LOCAL_PATH)/wifi/WCNSS_wlan_dictionary.dat:persist/WCNSS_wlan_dictionary.dat
 
 
 PRODUCT_PACKAGES += \
@@ -116,37 +100,37 @@ PRODUCT_LOCALES += th_TH vi_VN tl_PH hi_IN ar_EG ru_RU tr_TR pt_BR bn_IN mr_IN t
 PRODUCT_PACKAGES += telephony-ext
 PRODUCT_BOOT_JARS += telephony-ext
 
-# When can normal compile this module, need module owner enable below commands
-# Add the overlay path
-PRODUCT_PACKAGE_OVERLAYS := $(QCPATH)/qrdplus/Extension/res \
-        $(QCPATH)/qrdplus/globalization/multi-language/res-overlay \
-        $(PRODUCT_PACKAGE_OVERLAYS)
-
 #for android_filesystem_config.h
 PRODUCT_PACKAGES += \
     fs_config_files
 
 # Sensor HAL conf file
 PRODUCT_COPY_FILES += \
-     device/qcom/msm8953_32/sensors/hals.conf:system/etc/sensors/hals.conf
+     $(LOCAL_PATH)/sensors/hals.conf:system/etc/sensors/hals.conf
 
 # Disable Verity boot feature
 PRODUCT_SUPPORTS_VERITY := true
 
-# Enable logdumpd service only for non-perf bootimage
-ifeq ($(findstring perf,$(KERNEL_DEFCONFIG)),)
-    ifeq ($(TARGET_BUILD_VARIANT),user)
-        PRODUCT_DEFAULT_PROPERTY_OVERRIDES+= \
-            ro.logdumpd.enabled=0
-    else
-        PRODUCT_DEFAULT_PROPERTY_OVERRIDES+= \
-            ro.logdumpd.enabled=1
-    endif
-else
-    PRODUCT_DEFAULT_PROPERTY_OVERRIDES+= \
-        ro.logdumpd.enabled=0
-endif
-
 #FEATURE_OPENGLES_EXTENSION_PACK support string config file
 PRODUCT_COPY_FILES += \
         frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml
+
+# Keylayout
+PRODUCT_COPY_FILES += \
+     $(LOCAL_PATH)/keylayout/fpc1020.kl:system/usr/keylayout/fpc1020.kl
+
+# Ramdisk
+PRODUCT_PACKAGES += \
+    init.mmi.touch.sh \
+    wlan_carrier_bin.sh \
+    init.qcom.bt.sh \
+    init.qcom.ril.sh
+
+PRODUCT_PACKAGES += \
+    fstab.qcom \
+    init.mmi.boot.sh \
+    init.mmi.laser.sh \
+    init.mmi.rc \
+    init.mmi.usb.rc \
+    init.qcom.rc \
+    ueventd.qcom.rc

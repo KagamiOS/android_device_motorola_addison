@@ -24,7 +24,10 @@ TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 
 BOARD_USES_GENERIC_AUDIO := true
 
--include $(QCPATH)/common/msm8953_32/BoardConfigVendor.mk
+-include vendor/motorola/addison/BoardConfigVendor.mk
+
+DEVICE_PATH := device/motorola/addison
+
 TARGET_COMPILE_WITH_MSM_KERNEL := true
 TARGET_KERNEL_APPEND_DTB := true
 #TODO: Fix-me: Setting TARGET_HAVE_HDMI_OUT to false
@@ -62,6 +65,8 @@ BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
 BOARD_RAMDISK_OFFSET     := 0x02000000
 TARGET_USES_UNCOMPRESSED_KERNEL := false
 USE_CLANG_PLATFORM_BUILD := true
+TARGET_KERNEL_CONFIG := addison_defconfig
+TARGET_KERNEL_SOURCE := kernel/motorola/msm8953
 # Enables Adreno RS driver
 #OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 
@@ -83,11 +88,12 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 #TARGET_USES_AOSP := true
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=30 msm_rtb.filter=0x237 ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 earlycon=msm_hsl_uart,0x78af000
+BOARD_KERNEL_CMDLINE := androidboot.selinux=permissive
 #BOARD_KERNEL_SEPARATED_DT := true
 
-BOARD_SECCOMP_POLICY := device/qcom/msm8953_32/seccomp
+BOARD_SECCOMP_POLICY := $(DEVICE_PATH)/seccomp
 
-BOARD_EGL_CFG := device/qcom/msm8953_32/egl.cfg
+BOARD_EGL_CFG := $(DEVICE_PATH)/egl.cfg
 
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x02000000
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x02000000
@@ -104,24 +110,17 @@ TARGET_USE_MDTP := true
 # Disable the init blank to avoid flicker
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
-# Add NON-HLOS files for ota upgrade
-ADD_RADIO_FILES ?= true
-
 # Added to indicate that protobuf-c is supported in this build
 PROTOBUF_SUPPORTED := false
 TARGET_USES_ION := true
 TARGET_USES_NEW_ION_API :=true
 TARGET_USES_QCOM_BSP := true
 
-TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_msm
 TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 
 #Add support for firmare upgrade on msm8953
 HAVE_SYNAPTICS_I2C_RMI4_FW_UPGRADE := true
-
-#add suffix variable to uniquely identify the board
-TARGET_BOARD_SUFFIX := _32
 
 #Use dlmalloc instead of jemalloc for mallocs
 #MALLOC_IMPL := dlmalloc
@@ -146,8 +145,8 @@ TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 ifneq ($(TARGET_USES_AOSP),true)
   ifeq ($(HOST_OS),linux)
     ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-      WITH_DEXPREOPT_PIC := true
+      WITH_DEXPREOPT := false
+      WITH_DEXPREOPT_PIC := false
       ifneq ($(TARGET_BUILD_VARIANT),user)
         # Retain classes.dex in APK's for non-user builds
         DEX_PREOPT_DEFAULT := nostripping
@@ -156,4 +155,21 @@ ifneq ($(TARGET_USES_AOSP),true)
   endif
 endif
 
-BOARD_HAL_STATIC_LIBRARIES := libhealthd.msm
+# Bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
+BOARD_HAVE_BLUETOOTH := true
+BLUETOOTH_HCI_USE_MCT := true
+
+# Lights
+TARGET_PROVIDES_LIBLIGHT := true
+
+# Radio
+BOARD_PROVIDES_LIBRIL := true
+BOARD_PROVIDES_RILD := true
+
+# Recovery
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
+
+# SELinux
+include device/qcom/sepolicy/Android.mk
+BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy

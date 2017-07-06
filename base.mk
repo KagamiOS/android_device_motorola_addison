@@ -156,7 +156,7 @@ BT += libbt-vendor
 BT += libbthost_if
 BT += libbt-logClient
 BT += bt_logger
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/qcom/common
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
 
 #C2DColorConvert
 C2DCC := libc2dcolorconvert
@@ -168,13 +168,6 @@ CHROMIUM += libwebviewchromium_plat_support
 #CIMAX
 CIMAX := libcimax_spi
 
-#CM
-CM :=CMFileManager
-#CM += Trebuchet
-
-#Default Launcher
-DELAUN := Launcher3
-
 #CONNECTIVITY
 CONNECTIVITY := libcnefeatureconfig
 CONNECTIVITY += services-ext
@@ -185,8 +178,6 @@ CURL += curl
 
 #DASH
 DASH := libdashplayer
-DASH += libqcmediaplayer
-DASH += qcmediaplayer
 DASH += libextmedia_jni
 
 #EXTENDEDMEDIA_EXT
@@ -853,9 +844,6 @@ PRODUCT_PACKAGES += \
 # Qcril configuration file
 PRODUCT_PACKAGES += qcril.db
 
-# MSM updater library
-PRODUCT_PACKAGES += librecovery_updater_msm
-
 # vcard jar
 PRODUCT_PACKAGES += vcard
 
@@ -909,14 +897,14 @@ PRODUCT_COPY_FILES := \
 
 # gps/location secuity configuration file
 PRODUCT_COPY_FILES += \
-    device/qcom/common/sec_config:system/etc/sec_config
+    $(LOCAL_PATH)/sec_config:system/etc/sec_config
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
-    device/qcom/common/media/media_profiles.xml:system/etc/media_profiles.xml \
-    device/qcom/common/media/media_codecs.xml:system/etc/media_codecs.xml
+    $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml \
+    $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml
 
 ifeq ($(strip $(TARGET_USES_NQ_NFC)),true)
 PRODUCT_COPY_FILES += \
@@ -931,10 +919,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:system/etc/permissions/android.hardware.vulkan.level-0.xml \
     frameworks/native/data/etc/android.hardware.vulkan.version-1_0_3.xml:system/etc/permissions/android.hardware.vulkan.version-1_0_3.xml \
 
-# enable overlays to use our version of
-# source/resources etc.
-DEVICE_PACKAGE_OVERLAYS += device/qcom/common/device/overlay
-PRODUCT_PACKAGE_OVERLAYS += device/qcom/common/product/overlay
 # Set up flags to determine the kernel version
 ifeq ($(TARGET_KERNEL_VERSION),)
      TARGET_KERNEL_VERSION := 3.18
@@ -949,8 +933,6 @@ else
      KERNEL_TO_BUILD_ROOT_OFFSET := ../../
      TARGET_KERNEL_SOURCE := kernel/msm-$(TARGET_KERNEL_VERSION)
 endif
-# include additional build utilities
--include device/qcom/common/utils.mk
 
 #Enabling Ring Tones
 #include frameworks/base/data/sounds/OriginalAudio.mk
