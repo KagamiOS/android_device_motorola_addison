@@ -17,8 +17,13 @@
 # Inherit from addison device
 $(call inherit-product, device/motorola/addison/device.mk)
 
-# Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := addison
-PRODUCT_NAME := full_addison
 
 $(call inherit-product-if-exists, vendor/motorola/addison/addison-vendor.mk)
+# Device identifier. This must come after all inclusions
+PRODUCT_DEVICE := addison
+PRODUCT_NAME := addison
+PRODUCT_BRAND := motorola
+PRODUCT_MANUFACTURER := motorola
+BOARD_VENDOR := Motorola
+PRODUCT_MODEL := Moto Z Play
+TARGET_VENDOR := Motorola
