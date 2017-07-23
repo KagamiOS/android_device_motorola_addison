@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.settings.device;
+package com.dirtyunicorns.settings.device;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.util.Log;
 
-public class ProximitySensor implements ScreenStateNotifier, SensorEventListener {
-    private static final String TAG = "CMActions-ProximitySensor";
+import java.lang.System;
+
+public class StowSensor implements ScreenStateNotifier, SensorEventListener {
+    private static final String TAG = "CMActions-StowSensor";
+    private static final int IN_POCKET_MIN_TIME = 5000;
 
     private final CMActionsSettings mCMActionsSettings;
     private final SensorHelper mSensorHelper;
@@ -30,16 +33,16 @@ public class ProximitySensor implements ScreenStateNotifier, SensorEventListener
     private final Sensor mSensor;
 
     private boolean mEnabled;
+    private boolean mLastStowed;
+    private long isStowedTime;
 
-    private boolean mSawNear = false;
-
-    public ProximitySensor(CMActionsSettings cmActionsSettings, SensorHelper sensorHelper,
+    public StowSensor(CMActionsSettings cmActionsSettings, SensorHelper sensorHelper,
                 SensorAction action) {
         mCMActionsSettings = cmActionsSettings;
         mSensorHelper = sensorHelper;
         mSensorAction = action;
 
-        mSensor = sensorHelper.getProximitySensor();
+        mSensor = sensorHelper.getStowSensor();
     }
 
     @Override
@@ -53,7 +56,8 @@ public class ProximitySensor implements ScreenStateNotifier, SensorEventListener
 
     @Override
     public void screenTurnedOff() {
-        if (mCMActionsSettings.isIrWakeupEnabled() && !mEnabled) {
+        if (!mCMActionsSettings.isIrWakeupEnabled() &&
+            mCMActionsSettings.isPickUpEnabled() && !mEnabled) {
             Log.d(TAG, "Enabling");
             mSensorHelper.registerListener(mSensor, this);
             mEnabled = true;
@@ -62,15 +66,21 @@ public class ProximitySensor implements ScreenStateNotifier, SensorEventListener
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        boolean isNear = event.values[0] < mSensor.getMaximumRange();
-        if (mSawNear && !isNear) {
-            Log.d(TAG, "wave triggered");
-            mSensorAction.action();
+        boolean thisStowed = (event.values[0] != 0);
+        if(thisStowed){
+            isStowedTime = System.currentTimeMillis();
+        } else if (mLastStowed && !thisStowed) {
+            long inPocketTime = System.currentTimeMillis() - isStowedTime;
+            if(inPocketTime >= IN_POCKET_MIN_TIME){
+                Log.d(TAG, "Triggered after " + inPocketTime / 1000 + " seconds");
+                mSensorAction.action();
+            }
         }
-        mSawNear = isNear;
+        mLastStowed = thisStowed;
+        Log.d(TAG, "event: " + thisStowed);
     }
 
     @Override
-    public void onAccuracyChanged(Sensor mSensor, int accuracy) {
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 }

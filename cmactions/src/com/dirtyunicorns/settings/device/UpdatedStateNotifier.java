@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.settings.device;
+package com.dirtyunicorns.settings.device;
 
-interface ScreenStateNotifier {
-    public void screenTurnedOn();
-    public void screenTurnedOff();
+interface UpdatedStateNotifier {
+    public void updateState();
 }

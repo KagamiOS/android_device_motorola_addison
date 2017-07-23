@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.settings.device;
+package com.dirtyunicorns.settings.device;
 
 import android.content.Intent;
 import android.os.Binder;

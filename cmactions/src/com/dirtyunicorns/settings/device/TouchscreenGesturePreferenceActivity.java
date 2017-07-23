@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 The CyanogenMod Project
+ * Copyright (c) 2016 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.settings.device;
+package com.dirtyunicorns.settings.device;
 
-interface SensorAction {
-    public void action();
+import android.os.Bundle;
+
+import com.android.settingslib.drawer.SettingsDrawerActivity;
+
+public class TouchscreenGesturePreferenceActivity extends SettingsDrawerActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, new TouchscreenGesturePreferenceFragment()).commit();
+    }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.settings.device;
+package com.dirtyunicorns.settings.device;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -24,9 +24,9 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.cyanogenmod.settings.device.ServiceWrapper.LocalBinder;
+import com.dirtyunicorns.settings.device.ServiceWrapper.LocalBinder;
 
-import com.cyanogenmod.settings.device.util.FileUtils;
+import com.dirtyunicorns.settings.device.util.FileUtils;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
     static final String TAG = "CMActions";

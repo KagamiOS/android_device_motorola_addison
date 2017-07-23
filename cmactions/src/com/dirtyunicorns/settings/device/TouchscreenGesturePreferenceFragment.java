@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.settings.device;
+package com.dirtyunicorns.settings.device;
 
 import android.app.AlertDialog;
 import android.app.NotificationManager;
@@ -31,8 +31,8 @@ import android.text.TextUtils;
 
 import java.io.File;
 
-import com.cyanogenmod.settings.device.util.FileUtils;
-import com.cyanogenmod.settings.device.util.ScreenType;
+import com.dirtyunicorns.settings.device.util.FileUtils;
+import com.dirtyunicorns.settings.device.util.ScreenType;
 
 public class TouchscreenGesturePreferenceFragment extends PreferenceFragment {
     private SwitchPreference mFlipPref;

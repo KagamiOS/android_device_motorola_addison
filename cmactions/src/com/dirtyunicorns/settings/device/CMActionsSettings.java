@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.settings.device;
-
+package com.dirtyunicorns.settings.device;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
